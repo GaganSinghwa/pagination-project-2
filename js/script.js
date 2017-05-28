@@ -1,41 +1,46 @@
 let studentList = document.getElementsByClassName('student-item'); // getting all the student list.
-const $paginationDiv = $('.pagination');
-const perPage = 10;
-const pageCount = studentList.length/perPage;
+let pageSize = 10; // how many students should be on the page.
+let pageCount = studentList.length/pageSize;
+const $paginationDiv = $('.pagination'); //selecting the class pagination
 
 
-function addPagination()  {
-  let ul = $('<ul></ul>');
-  for (let i = 1; i <= pageCount; i++) {
-    let li = $('<li></li>');
+// creating the pages for the how many students are there.
+function pagination()  {
+  let ul = $('<ul></ul>'); //creating unorder list tags
+  for (let i = 1; i <= pageCount; i++) { //looping over the page count
+    let li = $('<li></li>'); //creating list for the  for each item.
     let anchor = $('<a href="#">' + i + '</a>');
-    $(li).append(anchor);
-    $(ul).append(li);
-    $paginationDiv.append(ul);
+    $(li).append(anchor); // appending li tag with a tag.
+    $(ul).append(li); // appending ul(students)  with li(students)
+    $paginationDiv.append(ul); // pagination  appening to all the ul.
   }
 }
-addPagination();
-// Lists the 10 students per page based on which page is clicked
-function listStudents(page) {
-  for (let i = 0; i <= studentList.length; i++) {
-      $(studentList[i]).hide();
-    if (i >= page * 10 && i <= (page * 10) + 9) {
-      $(studentList[i]).show();
+pagination();
+// showing the 10 students.
+let listStudents = (pageNum, studentList) => {
+  $(studentList).hide() //hiding the students
+  let students = []; //creating emety array for the students
+    for (let i = 0; i < studentList.length; i++){ // looping over the student list
+      if ( i + 1 <= (pageNum * pageSize)){
+     students.push(studentList[i]); // pushing the 10 students to page
+     $(studentList[i]).show();
+
     }
   }
+  return students;
 }
-listStudents(0);
-// Defines which students show up when according to the listStudents function
+$(listStudents(1, studentList));
+
+// Defines which students show up when each page is clicked.
 function displayPage() {
-  let $pages = $('.pagination ul li');
-  for (let i = 0; i < pageCount; i++) {
-    $($pages[i]).click(function() {
-      return listStudents(i);
+  let student = [];
+  let $pages = $('.pagination ul li'); //selecting class pagination unoreder list and list inside.
+  for (let i = 0; i < pageCount; i++) { // looping over the page .
+    $($pages[i]).click(function() { //when clicked on each page..
+      return student.push(studentList[i]); //
     });
+
   }
 }
-
-
-
 
 displayPage();
